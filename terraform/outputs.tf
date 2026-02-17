@@ -1,3 +1,3 @@
 output "web_ips" {
-  value = linode_instance.web[*].ipv4[0]
+  value = linode_instance.web[*].ip_address
 }
