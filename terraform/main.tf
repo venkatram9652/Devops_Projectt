@@ -9,5 +9,7 @@ resource "linode_instance" "web" {
   type   = "g6-standard-2"
   image  = "linode/ubuntu22.04"
 
-  authorized_keys = [var.ssh_public_key]
+authorized_keys = [
+  trimspace(replace(var.ssh_public_key, "\n", ""))
+]
 }
