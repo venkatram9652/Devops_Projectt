@@ -1,5 +1,4 @@
 name: GitOps Linode Deploy
-
 on:
   push:
     branches: [ main ]
