@@ -1,5 +1,6 @@
 #!/bin/bash
 
+cd terraform
 IPS=$(terraform output -json web_ips | jq -r '.[]')
 
 echo "[web]" > ../ansible/inventory/hosts.ini

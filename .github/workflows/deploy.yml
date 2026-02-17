@@ -1,4 +1,4 @@
-name: Linode Deploy
+name: GitOps Linode Deploy
 
 on:
   push:
@@ -12,7 +12,7 @@ jobs:
 
     steps:
 
-    - name: Checkout
+    - name: Checkout repo
       uses: actions/checkout@v4
 
     - name: Install Terraform
@@ -32,11 +32,8 @@ jobs:
     - name: Install jq
       run: sudo apt-get install -y jq
 
-    - name: Generate Ansible Inventory
-      working-directory: scripts
-      run: |
-        cd ../terraform
-        bash ../scripts/generate_inventory.sh
+    - name: Generate Inventory
+      run: bash scripts/generate_inventory.sh
 
     - name: Install Ansible
       run: sudo apt-get install -y ansible
@@ -48,5 +45,14 @@ jobs:
         chmod 600 ~/.ssh/id_rsa
 
     - name: Run Ansible
-      working-directory: ansible
-      run: ansible-playbook playbooks/site.yml
+      run: ansible-playbook ansible/playbook.yml
+
+    - name: Health Check
+      run: |
+        for ip in $(cat ansible/inventory/hosts.ini | grep -v web)
+        do
+          curl -f http://$ip || exit 1
+        done
+
+    - name: Deployment Success
+      run: echo "Deployment completed successfully"
