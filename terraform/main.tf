@@ -3,7 +3,7 @@ provider "linode" {
 }
 
 resource "linode_instance" "web" {
-  count  = 1
+  count  = 2
   label  = "web-${count.index}"
   region = var.region
   type   = "g6-standard-2"
